@@ -5,6 +5,15 @@ interface TakeoutFeature {
     coordinates?: [number, number];
   };
   properties?: {
+    // Current format (lowercase/snake_case)
+    date?: string;
+    google_maps_url?: string;
+    location?: {
+      name?: string;
+      address?: string;
+      country_code?: string;
+    };
+    // Legacy format (capitalized)
     Title?: string;
     "Google Maps URL"?: string;
     Location?: {
@@ -37,19 +46,23 @@ export function parseGeoJSON(data: TakeoutGeoJSON): ParsedLocation[] {
   for (const feature of data.features) {
     if (feature.type !== "Feature") continue;
 
-    const name = feature.properties?.Title;
+    const props = feature.properties;
+    const name = props?.location?.name ?? props?.Title;
     if (!name) continue;
 
-    const coords = feature.geometry?.type === "Point"
-      ? feature.geometry.coordinates
-      : undefined;
+    const coords =
+      feature.geometry?.type === "Point"
+        ? feature.geometry.coordinates
+        : undefined;
 
     locations.push({
       name,
-      address: feature.properties?.Location?.Address ?? null,
+      address:
+        props?.location?.address ?? props?.Location?.Address ?? null,
       latitude: coords ? coords[1] : null,
       longitude: coords ? coords[0] : null,
-      googleMapsUrl: feature.properties?.["Google Maps URL"] ?? null,
+      googleMapsUrl:
+        props?.google_maps_url ?? props?.["Google Maps URL"] ?? null,
       source: "imported",
     });
   }
