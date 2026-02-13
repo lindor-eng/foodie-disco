@@ -19,3 +19,9 @@ npm run lint         # Run ESLint
 - **Source**: All application code lives in `src/`
 - **Routing**: File-based routing under `src/app/` (App Router)
 - **Path alias**: `@/*` maps to `src/*`
+
+## Coding Principles
+
+- **KISS** — Keep implementations simple and straightforward. Prefer clarity over cleverness.
+- **YAGNI** — Don't add functionality or optimize for performance until it's actually needed.
+- **SOLID** — Keep code modular with single-responsibility modules, clear interfaces, and loose coupling.
